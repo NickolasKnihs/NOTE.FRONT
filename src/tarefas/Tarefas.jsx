@@ -1,12 +1,11 @@
 import { useRef, useState, useEffect } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
 function Tarefas() {
-
     const [listaTarefas, setListarefas] = useState([]);
     const [modoEdicao, setModoEdicao] = useState(false);
     const [descricaoEditada, setDescricaoEditada] = useState("");
@@ -32,7 +31,6 @@ function Tarefas() {
         } else {
             const novaTarefa = {
                 descricao: descricaoTarefaInputRef.current.value,
-              
             };
             fetch('http://localhost:4300/usuarios', {
                 method: 'POST',
@@ -94,32 +92,43 @@ function Tarefas() {
         ],
     };
 
+    const options = {
+        maintainAspectRatio: false,
+    };
+
     return (
-        <div >
-            <h2 style={{fontFamily: 'fantasy', color: 'grey'}}> Cadastrar Tarefa: </h2>
-            <input type="text" ref={descricaoTarefaInputRef} />
-            <button onClick={adicionaTarefa}>{modoEdicao ? "Salvar" : "Cadastrar"}</button>
-            <br />
-            <div>
-                {listaTarefas.map((tarefaAtual, index) => (
-                    <div key={tarefaAtual.descricao} style={{ display: 'flex', alignItems: 'center', margin: '10px' }}>
-                        <div style={{ flex: '1', color: 'white', backgroundColor: 'gray', textDecoration: pegaEstilo(tarefaAtual), marginRight: '10px', padding: '5px' }} onClick={() => atualizarTarefa(tarefaAtual)}>
-                            {tarefaAtual.descricao}
-                        </div>
-                        <button onClick={() => editarTarefa(index, tarefaAtual.descricao)}>Editar</button>
-                        <button onClick={() => excluirTarefa(tarefaAtual)}>Excluir</button>
+        <div style={{ display: 'flex', padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
+            <div style={{ flex: '1', padding: '10px' }}>
+                <h2 style={{ fontFamily: 'fantasy', color: 'grey', textAlign: 'center' }}>Cadastrar Tarefa</h2>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                    <div style={{ marginBottom: '20px' }}>
+                        <input type="text" ref={descricaoTarefaInputRef} style={{ marginRight: '10px' }} />
+                        <button onClick={adicionaTarefa}>{modoEdicao ? "Salvar" : "Cadastrar"}</button>
                     </div>
-                ))}
+                    <div style={{ maxHeight: '300px', overflowY: 'scroll', border: '1px solid #ccc', padding: '10px', width: '100%' }}>
+                        {listaTarefas.map((tarefaAtual, index) => (
+                            <div key={tarefaAtual.descricao} style={{ display: 'flex', alignItems: 'center', margin: '10px 0' }}>
+                                <div style={{ flex: '1', color: 'white', backgroundColor: 'gray', textDecoration: pegaEstilo(tarefaAtual), marginRight: '10px', padding: '5px' }} onClick={() => atualizarTarefa(tarefaAtual)}>
+                                    {tarefaAtual.descricao}
+                                </div>
+                                <button onClick={() => editarTarefa(index, tarefaAtual.descricao)} style={{ marginRight: '5px' }}>Editar</button>
+                                <button onClick={() => excluirTarefa(tarefaAtual)}>Excluir</button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
-            {/* GRAFICO */}
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <Pie data={data} />
-            </div>
-            {/* Link para voltar */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                <Link to={'/'}>
-                    <input type="button" value="Voltar" className="btn btn-danger" style={{ width: '100px', height: '40px' }} />
-                </Link>
+            <div style={{ flex: '1', padding: '10px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                {/* GRAFICO */}
+                <div style={{ width: '80%', height: '300px', marginBottom: '20px' }}>
+                    <Pie data={data} options={options} />
+                </div>
+                {/* Link para voltar */}
+                <div style={{ marginTop: '20px' }}>
+                    <Link to={'/'}>
+                        <input type="button" value="Voltar" className="btn btn-danger" style={{ width: '100px', height: '40px' }} />
+                    </Link>
+                </div>
             </div>
         </div>
     );
