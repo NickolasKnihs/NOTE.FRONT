@@ -50,7 +50,7 @@ const Cabecalho = () => {
                         {theme === "dark" ? "Modo dark" : "Modo Light"}
                     </Switch>
                 </div>
-                {location.pathname !== '/inicio' && location.pathname !== '/login' && location.pathname !== '/cadastrar' && (
+                {(location.pathname !== '/inicio' && location.pathname !== '/login' && location.pathname !== '/cadastrar' && location.pathname !== '/tarefas') && (
                     <div 
                         style={{
                             position: 'relative',
@@ -68,7 +68,7 @@ const Cabecalho = () => {
                         NOTAS .app
                     </div>
                 )}
-                <Outlet />
+                <Outlet /> 
             </Container>
         </ThemeProvider>
     );

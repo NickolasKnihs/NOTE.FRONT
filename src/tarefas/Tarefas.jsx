@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
+import { Link } from "react-router-dom"; 
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -94,7 +95,7 @@ function Tarefas() {
     };
 
     return (
-        <div>
+        <div >
             <h2 style={{fontFamily: 'fantasy', color: 'grey'}}> Cadastrar Tarefa: </h2>
             <input type="text" ref={descricaoTarefaInputRef} />
             <button onClick={adicionaTarefa}>{modoEdicao ? "Salvar" : "Cadastrar"}</button>
@@ -113,6 +114,12 @@ function Tarefas() {
             {/* GRAFICO */}
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                 <Pie data={data} />
+            </div>
+            {/* Link para voltar */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                <Link to={'/'}>
+                    <input type="button" value="Voltar" className="btn btn-danger" style={{ width: '100px', height: '40px' }} />
+                </Link>
             </div>
         </div>
     );
