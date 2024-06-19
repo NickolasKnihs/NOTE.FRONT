@@ -1,43 +1,68 @@
-import React from 'react'
-import { Link, Outlet } from "react-router-dom";
-import "./Style.css"
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom'; // Importando Link
+import axios from 'axios';
+import './Style.css'; // Importando o arquivo de estilos CSS
 
 const Login = () => {
-    return (
-        <div className="container mt-5">
-            <h2 className="text-center mb-4" style={{ fontFamily: 'fantasy', color: 'grey' }}>Login</h2>
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-            <form style={{ fontFamily: 'fantasy', color: 'grey' }} className="mb-4">
-                <div className="mb-3">
-                    <label className="form-label">User:</label>
-                    <input type="text" name="nome" className="form-control" />
-                </div>
-                
-                <div className="mb-3">
-                    <label className="form-label">Senha:</label>
-                    <input type="password" id="senha" className="form-control" />
-                </div>
-                
-                <div className="d-flex justify-content-between">
-                    <Link to={'/tarefas'}>
-                        <input type="button" value="enviar" className="btn btn-primary" style={{ width: '60px', height: '30px' }} />
-                    </Link>
-                </div>
-            </form>
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    try {
+      console.log("Login attempt with", { email, password });
+      const response = await axios.post('http://localhost:4300/login', {
+        email,
+        password,
+      });
 
-            <div className="d-flex justify-content-end mb-4">
-                <Link to={'/cadastrar'} className="mx-2">
-                    <input type="button" value="cadastrar" className="btn btn-secondary" style={{ width: '100px', height: '40px' }} />
-                </Link>
+      if (response.status === 200) {
+        console.log('Login successful');
+        navigate('/tarefas');
+      }
+    } catch (error) {
+      console.error('Login failed', error);
+    }
+  };
 
-                <Link to={'/'}>
-                    <input type="button" value="voltar" className="btn btn-danger" style={{ width: '100px', height: '40px' }} />
-                </Link>
-            </div>
-
-            <Outlet />
+  return (
+    <div className="container mt-5">
+      <h2 className="text-center mb-4" style={{ fontFamily: 'fantasy', color: 'grey' }}>
+        Login
+      </h2>
+      <form onSubmit={handleLogin} className="mb-4" style={{ fontFamily: 'fantasy', color: 'grey' }}>
+        <div className="mb-3">
+          <label className="form-label">Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="form-control"
+            name="email"
+          />
         </div>
-    )
-}
+        <div className="mb-3">
+          <label className="form-label">Senha:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="form-control"
+            name="senha"
+          />
+        </div>
+        <div className="d-flex justify-content-between">
+          <button type="submit" className="btn btn-primary">
+            Login
+          </button>
+        </div>
+      </form>
+      <div className="d-flex justify-content-end mt-4">
+        <Link to={'/'} className="btn btn-danger">Voltar</Link>
+      </div>
+    </div>
+  );
+};
 
 export default Login;
